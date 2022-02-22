@@ -51,13 +51,34 @@ jobs:
 #        name: gdb-11.1.wip
 #        path: ~/gdb.tar
     - name: Test
+      continue-on-error: true
       run: |
           echo 'set startup-with-shell off' > $HOME/.gdbinit
           cd ../build
           echo $PWD
           echo $CC
           echo $CXX
-          make check-gdb RUNTESTFLAGS="INTERNAL_GDBFLAGS=\"-nw -data-directory $PWD/gdb/data-directory -iex 'set height 0' -iex 'set width 0'\""
+          make check-gdb RUNTESTFLAGS="INTERNAL_GDBFLAGS='-nw'"
+    - name: Test
+      continue-on-error: true
+      run: |
+          echo 'set startup-with-shell off' > $HOME/.gdbinit
+          cd ../build
+          echo $PWD
+          echo $CC
+          echo $CXX
+          make check-gdb RUNTESTFLAGS="INTERNAL_GDBFLAGS='-nw -data-directory $PWD/gdb/data-directory'"
+    - name: Test
+      continue-on-error: true
+      run: |
+          echo 'set startup-with-shell off' > $HOME/.gdbinit
+          cd ../build
+          echo $PWD
+          echo $CC
+          echo $CXX
+          RUNTESTFLAGS="INTERNAL_GDBFLAGS='-nw -data-directory \"$PWD/gdb/data-directory\" -iex \"set height 0\" -iex \"set width 0\"'"
+          echo $RUNTESTFLAGS
+          make check-gdb RUNTESTFLAGS=$RUNTESTFLAGS
     - name: Setup tmate session
 #      if: ${{ failure() }}
       uses: mxschmitt/action-tmate@v3
